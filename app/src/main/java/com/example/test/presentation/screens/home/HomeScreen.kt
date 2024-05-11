@@ -21,25 +21,19 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.test.configs.navigation.NavigationItem
+import com.example.test.presentation.screens.home.mdels.HomeUiState
 
 @Composable
 fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
-    val dataState = viewModel.dataState.collectAsState()
-    val isWaitingDataState = viewModel.isWaitingData.collectAsState()
-    val isWaitingInsert = viewModel.isWaitingInsert.collectAsState()
-    val errorData = viewModel.dataError.collectAsState()
-    val errorInsert = viewModel.insertError.collectAsState()
-    SideEffect {
-        if (errorData.value.isNotEmpty()) {
-            Log.d("HomeScreen", "Error: ${errorData.value}")
-        }
-        if (errorInsert.value.isNotEmpty()) {
-            Log.d("HomeScreen", "Error: ${errorInsert.value}")
-        }
-    }
+    val homeUiState = viewModel.homeUiState.collectAsState()
+    val dataState = homeUiState.value.dataState
+    val isWaitingInsert = homeUiState.value.isWaitingInsert
+    val isWaitingData = homeUiState.value.isWaitingData
+    val idInput = viewModel.idInput
+    val nameInput = viewModel.nameInput
     Scaffold { innerPadding ->
         Box {
             Column(
@@ -50,16 +44,30 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(text = "Data")
-                if (dataState.value.isEmpty()) {
+                if (homeUiState.value.dataState.isEmpty()) {
                     Text(text = "No data")
                 } else {
                     Column {
-                        dataState.value.forEach {
+                        dataState.forEach {
                             Text(text = it.name)
                         }
                     }
                 }
-                TextField(value =, onValueChange =)
+
+                TextField(
+                    value = idInput,
+                    onValueChange = {
+                        viewModel.onIdInputChanged(it)
+                    }
+                )
+
+                TextField(
+                    value = idInput,
+                    onValueChange = {
+                        viewModel.onNameInputChanged(it)
+                    }
+                )
+
                 Button(onClick = {
                     viewModel.insertRandomData()
                 }) {
@@ -82,7 +90,7 @@ fun HomeScreen(
                 }
             }
 
-            if (isWaitingDataState.value || isWaitingInsert.value) {
+            if (isWaitingData || isWaitingInsert) {
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ) {
