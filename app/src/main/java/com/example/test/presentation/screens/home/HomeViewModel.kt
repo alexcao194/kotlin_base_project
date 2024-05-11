@@ -117,4 +117,13 @@ class HomeViewModel @Inject constructor(
             getHobbyUseCase.execute(Unit)
         }
     }
+
+    fun clearError() {
+        _homeUiState.update {
+            it.copy(
+                insertError = null,
+                dataError = null
+            )
+        }
+    }
 }

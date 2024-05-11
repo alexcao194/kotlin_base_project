@@ -1,26 +1,40 @@
 package com.example.test.presentation.screens.home
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarData
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.test.configs.navigation.NavigationItem
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
@@ -32,8 +46,16 @@ fun HomeScreen(
     val isWaitingInsert = homeUiState.value.isWaitingInsert
     val idInput = viewModel.idInput
     val nameInput = viewModel.nameInput
-
-    Scaffold { innerPadding ->
+    val insertError = homeUiState.value.insertError
+    val scope = rememberCoroutineScope()
+    val snackBarHostState = remember { SnackbarHostState() }
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackBarHostState
+            )
+        }
+    ) { innerPadding ->
         Box {
             Column(
                 modifier = Modifier
@@ -60,7 +82,7 @@ fun HomeScreen(
                     modifier = Modifier.padding(16.dp),
                     value = idInput,
                     label = {
-                            Text(text = "ID")
+                        Text(text = "ID")
                     },
                     onValueChange = {
                         viewModel.onIdInputChanged(it)
@@ -71,7 +93,7 @@ fun HomeScreen(
                     modifier = Modifier.padding(16.dp),
                     value = nameInput,
                     label = {
-                            Text(text = "Name")
+                        Text(text = "Name")
                     },
                     onValueChange = {
                         viewModel.onNameInputChanged(it)
@@ -104,6 +126,62 @@ fun HomeScreen(
                     Dialog(onDismissRequest = { }) {
                         Text(text = "Loading...")
                     }
+                }
+            }
+//
+//            if (homeUiState.value.insertError != null) {
+//                val dialogTitle = "Error"
+//                val dialogText = homeUiState.value.insertError ?: ""
+//                val onDismissRequest = {
+//                    viewModel.clearError()
+//                }
+//                val onConfirmation = {
+//                    viewModel.clearError()
+//                }
+//                Surface(
+//                    modifier = Modifier,
+//                ) {
+//                    AlertDialog(
+//                        title = {
+//                            Text(text = dialogTitle)
+//                        },
+//                        text = {
+//                            Text(text = dialogText)
+//                        },
+//                        onDismissRequest = {
+//                            onDismissRequest()
+//                        },
+//                        confirmButton = {
+//                            TextButton(
+//                                onClick = {
+//                                    onConfirmation()
+//                                }
+//                            ) {
+//                                Text("Confirm")
+//                            }
+//                        },
+//                        dismissButton = {
+//                            TextButton(
+//                                onClick = {
+//                                    onDismissRequest()
+//                                }
+//                            ) {
+//                                Text("Dismiss")
+//                            }
+//                        }
+//                    )
+//                }
+//            }
+
+            LaunchedEffect(insertError) {
+                Log.d("HomeScreen", "Data - error: $insertError")
+                if (insertError != null) {
+                    scope.launch {
+                        snackBarHostState.showSnackbar(
+                            "Error: $insertError",
+                        )
+                    }
+                    viewModel.clearError()
                 }
             }
         }
