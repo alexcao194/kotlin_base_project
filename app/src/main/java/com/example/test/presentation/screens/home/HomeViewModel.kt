@@ -55,15 +55,49 @@ class HomeViewModel @Inject constructor(
 
     }
 
-    fun insertRandomData () {
-
-    }
-
-    fun insertWithInvalidData() {
-        _homeUiState.update { homeUiState ->
-            homeUiState.copy(
-                insertError = "This error is created by hand"
+    fun insertData () {
+        _homeUiState.update {
+            it.copy(
+                insertError = null,
+                isWaitingInsert = true
             )
+        }
+
+        if (idInput.isEmpty() || nameInput.isEmpty()) {
+            _homeUiState.update {
+                it.copy(
+                    insertError = "Please fill all fields",
+                    isWaitingInsert = false
+                )
+            }
+            return
+        }
+
+        val id = idInput.toIntOrNull()
+
+        if (id == null) {
+            _homeUiState.update {
+                it.copy(
+                    insertError = "Id must be a number",
+                    isWaitingInsert = false
+                )
+            }
+            return
+        }
+
+        viewModelScope.launch {
+            insertDataUseCase.execute(
+                Data(
+                    id = idInput.toInt(),
+                    name = nameInput
+                )
+            )
+
+            _homeUiState.update {
+                it.copy(
+                    isWaitingInsert = false
+                )
+            }
         }
     }
 
