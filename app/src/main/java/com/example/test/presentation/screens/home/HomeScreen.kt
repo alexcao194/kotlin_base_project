@@ -34,6 +34,8 @@ fun HomeScreen(
     val isWaitingData = homeUiState.value.isWaitingData
     val idInput = viewModel.idInput
     val nameInput = viewModel.nameInput
+
+
     Scaffold { innerPadding ->
         Box {
             Column(
@@ -55,14 +57,22 @@ fun HomeScreen(
                 }
 
                 TextField(
+                    modifier = Modifier.padding(16.dp),
                     value = idInput,
+                    label = {
+                            Text(text = "ID")
+                    },
                     onValueChange = {
                         viewModel.onIdInputChanged(it)
                     }
                 )
 
                 TextField(
-                    value = idInput,
+                    modifier = Modifier.padding(16.dp),
+                    value = nameInput,
+                    label = {
+                            Text(text = "Name")
+                    },
                     onValueChange = {
                         viewModel.onNameInputChanged(it)
                     }
