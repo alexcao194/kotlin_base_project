@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.org.jetbrains.kotlin.kapt)
     alias(libs.plugins.com.google.devtools.ksp)
+    alias(libs.plugins.jetbrains.kotlinx.serialization)
 }
 
 android {
@@ -64,6 +65,10 @@ dependencies {
     implementation(libs.hilt.navigation)
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
+    implementation(libs.retrofit)
+    implementation(libs.serialization.converter)
+    implementation(libs.square.okhttp)
+    implementation(libs.kotlinx.serialization)
     ksp(libs.room.compiler)
     kapt(libs.hilt.compiler)
     testImplementation(libs.junit)

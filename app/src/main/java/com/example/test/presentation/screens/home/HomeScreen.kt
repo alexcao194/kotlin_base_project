@@ -83,6 +83,13 @@ fun HomeScreen(
                 }) {
                     Text(text = "Insert Hobby")
                 }
+
+                Button(onClick = {
+                    viewModel.getHobbies()
+                }) {
+                    Text(text = "Get Hobbies")
+                }
+
                 Button(onClick = {
                     openDetailScreen(navController = navController)
                 }) {

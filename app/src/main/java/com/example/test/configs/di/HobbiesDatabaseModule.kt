@@ -2,6 +2,7 @@ package com.example.test.configs.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.test.data.data_sources.database.HOBBIES_DATABASE_NAME
 import com.example.test.data.data_sources.database.HobbiesDatabase
 import dagger.Module
 import dagger.Provides
@@ -13,12 +14,11 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class HobbiesDatabaseModule {
-
     @Singleton
     @Provides
     fun provideHobbiesDatabase(
         @ApplicationContext context: Context
-    ): HobbiesDatabase = Room.databaseBuilder(context, HobbiesDatabase::class.java, "Hobbies")
+    ): HobbiesDatabase = Room.databaseBuilder(context, HobbiesDatabase::class.java, HOBBIES_DATABASE_NAME)
         .fallbackToDestructiveMigration()
         .build()
 

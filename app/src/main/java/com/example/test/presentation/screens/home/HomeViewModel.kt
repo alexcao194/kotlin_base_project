@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.test.core.response.Response
 import com.example.test.core.response.asResponse
 import com.example.test.domain.entities.Hobby
+import com.example.test.domain.use_cases.GetHobbyStreamUseCase
 import com.example.test.domain.use_cases.GetHobbyUseCase
 import com.example.test.domain.use_cases.InsertHobbyUseCase
 import com.example.test.presentation.screens.home.mdels.HomeUiState
@@ -23,14 +24,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getHobbyUseCase: GetHobbyUseCase,
-    private val insertHobbyUseCase: InsertHobbyUseCase
+    getHobbyStreamUseCase: GetHobbyStreamUseCase,
+    private val insertHobbyUseCase: InsertHobbyUseCase,
+    private val getHobbyUseCase: GetHobbyUseCase
 ) : ViewModel() {
 
     private val _homeUiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState())
     val homeUiState: StateFlow<HomeUiState> = combine(
         _homeUiState,
-        getHobbyUseCase.execute(Unit).asResponse()
+        getHobbyStreamUseCase.execute(Unit).asResponse()
     ) { uiState, data ->
         when (data) {
             is Response.Success -> {
@@ -107,6 +109,12 @@ class HomeViewModel @Inject constructor(
 
             idInput = ""
             nameInput = ""
+        }
+    }
+
+    fun getHobbies() {
+        viewModelScope.launch {
+            getHobbyUseCase.execute(Unit)
         }
     }
 }

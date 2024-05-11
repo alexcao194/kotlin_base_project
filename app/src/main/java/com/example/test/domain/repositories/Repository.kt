@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.Flow
 interface Repository {
     fun getHobbyStream(): Flow<List<Hobby>>
 
+    suspend fun getHobbies()
+
     suspend fun insertHobby(hobby: Hobby)
 
     suspend fun deleteHobby(hobby: Hobby)

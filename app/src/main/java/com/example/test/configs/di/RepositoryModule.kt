@@ -1,6 +1,7 @@
 package com.example.test.configs.di
 
 import com.example.test.data.data_sources.database.HobbyDao
+import com.example.test.data.data_sources.remote.HobbiesApiService
 import com.example.test.data.repositories.RepositoryImpl
 import com.example.test.domain.repositories.Repository
 import dagger.Module
@@ -14,7 +15,10 @@ import javax.inject.Singleton
 class RepositoryModule {
     @Singleton
     @Provides
-    fun provideRepository(hobbyDao: HobbyDao): Repository {
-        return RepositoryImpl(hobbyDao)
+    fun provideRepository(hobbyDao: HobbyDao, hobbiesApiService: HobbiesApiService): Repository {
+        return RepositoryImpl(
+            hobbyDao = hobbyDao,
+            hobbiesApiService = hobbiesApiService
+        )
     }
 }
