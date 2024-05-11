@@ -1,5 +1,6 @@
 package com.example.test.presentation.screens.home
 
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.test.core.response.Response
@@ -37,6 +38,8 @@ class HomeViewModel @Inject constructor(
 
     private val _insertError: MutableStateFlow<String> = MutableStateFlow("")
     val insertError: StateFlow<String> = _insertError
+
+    var id = remember { 0 }
 
     init {
         getData()

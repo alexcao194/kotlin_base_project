@@ -4,15 +4,19 @@ import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -39,13 +43,23 @@ fun HomeScreen(
     Scaffold { innerPadding ->
         Box {
             Column(
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column {
-                    dataState.value.forEach {
-                        Text(text = it.name)
+                Text(text = "Data")
+                if (dataState.value.isEmpty()) {
+                    Text(text = "No data")
+                } else {
+                    Column {
+                        dataState.value.forEach {
+                            Text(text = it.name)
+                        }
                     }
                 }
+                TextField(value =, onValueChange =)
                 Button(onClick = {
                     viewModel.insertRandomData()
                 }) {
