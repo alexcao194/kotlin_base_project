@@ -33,10 +33,8 @@ fun HomeScreen(
     val homeUiState = viewModel.homeUiState.collectAsState()
     val dataState = homeUiState.value.dataState
     val isWaitingInsert = homeUiState.value.isWaitingInsert
-    val isWaitingData = homeUiState.value.isWaitingData
     val idInput = viewModel.idInput
     val nameInput = viewModel.nameInput
-
 
     Scaffold { innerPadding ->
         Box {
@@ -100,7 +98,7 @@ fun HomeScreen(
                 }
             }
 
-            if (isWaitingData || isWaitingInsert) {
+            if (isWaitingInsert) {
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ) {

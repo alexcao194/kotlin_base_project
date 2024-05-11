@@ -1,5 +1,6 @@
 package com.example.test.presentation.screens.home
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -31,31 +33,52 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _homeUiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState())
-    val homeUiState: StateFlow<HomeUiState> = _homeUiState.asStateFlow()
+    val homeUiState: StateFlow<HomeUiState> = combine(
+        _homeUiState,
+        getDataUseCase.execute(Unit).asResponse()
+    ) { uiState, data ->
+        when (data) {
+            is Response.Success -> {
+                uiState.copy(
+                    dataState = data.data,
+                    isWaitingData = false,
+                    dataError = null
+                )
+            }
+            is Response.Error -> {
+                uiState.copy(
+                    isWaitingData = false,
+                    dataError = data.exception.message
+                )
+            }
+            is Response.Loading -> {
+                uiState.copy(
+                    isWaitingData = true,
+                    dataError = null
+                )
+            }
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = HomeUiState()
+    )
 
     var idInput by mutableStateOf("")
         private set
 
-    fun onIdInputChanged (value: String) {
+    fun onIdInputChanged(value: String) {
         idInput = value
     }
 
     var nameInput by mutableStateOf("")
         private set
 
-    fun onNameInputChanged (value: String) {
+    fun onNameInputChanged(value: String) {
         nameInput = value
     }
 
-    init {
-        getData()
-    }
-
-    private fun getData () {
-
-    }
-
-    fun insertData () {
+    fun insertData() {
         _homeUiState.update {
             it.copy(
                 insertError = null,
@@ -98,10 +121,13 @@ class HomeViewModel @Inject constructor(
                     isWaitingInsert = false
                 )
             }
+
+            idInput = ""
+            nameInput = ""
         }
     }
 
-    fun getDataSuspending () {
+    fun getDataSuspending() {
 
     }
 }
