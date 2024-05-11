@@ -87,11 +87,6 @@ fun HomeScreen(
                     Text(text = "Insert Data")
                 }
                 Button(onClick = {
-                    viewModel.getDataSuspending()
-                }) {
-                    Text(text = "Get Data Suspending")
-                }
-                Button(onClick = {
                     openDetailScreen(navController = navController)
                 }) {
                     Text(text = "Go to Detail Screen")
