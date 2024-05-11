@@ -1,14 +1,14 @@
 package com.example.test.domain.repositories
 
-import com.example.test.domain.entities.Data
+import com.example.test.domain.entities.Hobby
 import kotlinx.coroutines.flow.Flow
 
 interface Repository {
-    fun getDataStream(): Flow<List<Data>>
+    fun getHobbyStream(): Flow<List<Hobby>>
 
-    suspend fun insertData(data: Data)
+    suspend fun insertHobby(hobby: Hobby)
 
-    suspend fun deleteData(data: Data)
+    suspend fun deleteHobby(hobby: Hobby)
 
-    suspend fun updateData(data: Data)
+    suspend fun updateHobby(hobby: Hobby)
 }

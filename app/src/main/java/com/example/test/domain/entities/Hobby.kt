@@ -1,6 +1,6 @@
 package com.example.test.domain.entities
 
-data class Data (
-    val id: Int = 0,
+data class Hobby (
+    val id: String = "",
     val name: String = ""
 )

@@ -1,9 +1,9 @@
 package com.example.test.presentation.screens.home.mdels
 
-import com.example.test.domain.entities.Data
+import com.example.test.domain.entities.Hobby
 
 data class HomeUiState (
-    val dataState: List<Data> = emptyList(),
+    val hobbyState: List<Hobby> = emptyList(),
     val isWaitingData: Boolean = false,
     val dataError: String? = null,
 

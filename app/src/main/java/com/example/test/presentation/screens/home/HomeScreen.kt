@@ -1,6 +1,5 @@
 package com.example.test.presentation.screens.home
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +12,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,7 +21,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.test.configs.navigation.NavigationItem
-import com.example.test.presentation.screens.home.mdels.HomeUiState
 
 @Composable
 fun HomeScreen(
@@ -31,7 +28,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val homeUiState = viewModel.homeUiState.collectAsState()
-    val dataState = homeUiState.value.dataState
+    val dataState = homeUiState.value.hobbyState
     val isWaitingInsert = homeUiState.value.isWaitingInsert
     val idInput = viewModel.idInput
     val nameInput = viewModel.nameInput
@@ -45,9 +42,9 @@ fun HomeScreen(
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Data")
-                if (homeUiState.value.dataState.isEmpty()) {
-                    Text(text = "No data")
+                Text(text = "Hobbies")
+                if (homeUiState.value.hobbyState.isEmpty()) {
+                    Text(text = "No hobbies found")
                 } else {
                     Column {
                         dataState.forEach {
@@ -84,7 +81,7 @@ fun HomeScreen(
                 Button(onClick = {
                     viewModel.insertData()
                 }) {
-                    Text(text = "Insert Data")
+                    Text(text = "Insert Hobby")
                 }
                 Button(onClick = {
                     openDetailScreen(navController = navController)

@@ -1,6 +1,6 @@
 package com.example.test.configs.di
 
-import com.example.test.data.data_sources.database.DataDao
+import com.example.test.data.data_sources.database.HobbyDao
 import com.example.test.data.repositories.RepositoryImpl
 import com.example.test.domain.repositories.Repository
 import dagger.Module
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 class RepositoryModule {
     @Singleton
     @Provides
-    fun provideRepository(dataDao: DataDao): Repository {
-        return RepositoryImpl(dataDao)
+    fun provideRepository(hobbyDao: HobbyDao): Repository {
+        return RepositoryImpl(hobbyDao)
     }
 }
