@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.test"
+    namespace = "com.alexcao.baseproject"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.test"
+        applicationId = "com.alexcao.baseproject"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
