@@ -2,7 +2,6 @@ package com.example.test.configs.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.test.data.data_sources.database.HOBBIES_DATABASE_NAME
 import com.example.test.data.data_sources.database.HobbiesDatabase
 import dagger.Module
 import dagger.Provides
@@ -18,9 +17,11 @@ class HobbiesDatabaseModule {
     @Provides
     fun provideHobbiesDatabase(
         @ApplicationContext context: Context
-    ): HobbiesDatabase = Room.databaseBuilder(context, HobbiesDatabase::class.java, HOBBIES_DATABASE_NAME)
-        .fallbackToDestructiveMigration()
-        .build()
+    ): HobbiesDatabase {
+        return Room.databaseBuilder(context, HobbiesDatabase::class.java, HobbiesDatabase.HOBBIES_DATABASE_NAME)
+            .fallbackToDestructiveMigration()
+            .build()
+    }
 
     @Singleton
     @Provides
